@@ -10,12 +10,14 @@ import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
 import kotlin.collections.set
 import org.tensorflow.lite.Interpreter
+import org.tensorflow.lite.gpu.GpuDelegate
 
 @SuppressWarnings("GoodTime")
 class StyleTransferModelExecutor(
     context: Context,
     private var useGPU: Boolean = false
 ) {
+    private var gpuDelegate: GpuDelegate? = null
     private var numberThreads = 4
 
     private val interpreterPredict: Interpreter
