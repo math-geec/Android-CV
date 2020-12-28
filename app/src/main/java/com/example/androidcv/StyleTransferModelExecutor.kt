@@ -29,11 +29,14 @@ class StyleTransferModelExecutor(
     private var styleTransferTime = 0L
     private var postProcessTime = 0L
 
+    // Note: TensorFlow Lite Interpreter must be created on the same thread as where it is run
     init {
         if (useGPU) {
+            // float16 quantized model for GPU inference
             interpreterPredict = getInterpreter(context, STYLE_PREDICT_FLOAT16_MODEL, true)
             interpreterTransform = getInterpreter(context, STYLE_TRANSFER_FLOAT16_MODEL, true)
         } else {
+            // int8 quantized model for CPU inference
             interpreterPredict = getInterpreter(context, STYLE_PREDICT_INT8_MODEL, false)
             interpreterTransform = getInterpreter(context, STYLE_TRANSFER_INT8_MODEL, false)
         }
@@ -62,14 +65,18 @@ class StyleTransferModelExecutor(
             preProcessTime = SystemClock.uptimeMillis()
 
             val contentImage = ImageUtils.decodeBitmap(File(contentImagePath))
+            // Content Image Shape: (1, 384, 384, 3)
             val contentArray =
                 ImageUtils.bitmapToByteBuffer(contentImage, CONTENT_IMAGE_SIZE, CONTENT_IMAGE_SIZE)
             val styleBitmap =
                 ImageUtils.loadBitmapFromResources(context, "thumbnails/$styleImageName")
+            // Style Image Shape: (1, 256, 256, 3)
             val input = ImageUtils.bitmapToByteBuffer(styleBitmap, STYLE_IMAGE_SIZE, STYLE_IMAGE_SIZE)
 
+            // Set inputs for style predict model
             val inputsForPredict = arrayOf<Any>(input)
             val outputsForPredict = HashMap<Int, Any>()
+            // Style Bottleneck Shape: (1, 1, 1, 100)
             val styleBottleneck = Array(1) { Array(1) { Array(1) { FloatArray(BOTTLENECK_SIZE) } } }
             outputsForPredict[0] = styleBottleneck
             preProcessTime = SystemClock.uptimeMillis() - preProcessTime
@@ -81,6 +88,7 @@ class StyleTransferModelExecutor(
             stylePredictTime = SystemClock.uptimeMillis() - stylePredictTime
             Log.d(TAG, "Style Predict Time to run: $stylePredictTime")
 
+            // Set inputs for style transform model
             val inputsForStyleTransfer = arrayOf(contentArray, styleBottleneck)
             val outputsForStyleTransfer = HashMap<Int, Any>()
             val outputImage =
@@ -96,6 +104,7 @@ class StyleTransferModelExecutor(
             Log.d(TAG, "Style apply Time to run: $styleTransferTime")
 
             postProcessTime = SystemClock.uptimeMillis()
+            // Final Stylized Image Shape: (1, 384, 384, 3)
             var styledImage =
                 ImageUtils.convertArrayToBitmap(outputImage, CONTENT_IMAGE_SIZE, CONTENT_IMAGE_SIZE)
             postProcessTime = SystemClock.uptimeMillis() - postProcessTime
@@ -146,14 +155,15 @@ class StyleTransferModelExecutor(
         useGpu: Boolean = false
     ): Interpreter {
         val tfliteOptions = Interpreter.Options()
-        tfliteOptions.setNumThreads(numberThreads)
 
         gpuDelegate = null
+        // if the device has a supported GPU, add the GPU delegate
         if (useGpu) {
             gpuDelegate = GpuDelegate()
             tfliteOptions.addDelegate(gpuDelegate)
         }
 
+        // if the GPU is not supported, run on multiple CPU threads (4 in this case)
         tfliteOptions.setNumThreads(numberThreads)
         return Interpreter(loadModelFile(context, modelName), tfliteOptions)
     }

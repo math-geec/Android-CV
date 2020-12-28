@@ -26,7 +26,7 @@ class CreateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
 
-        btnGallary.setOnClickListener {
+        btnGallery.setOnClickListener {
             Log.i("btnGallery", "Open up image picker on device")
             val imagePickerIntent = Intent(Intent.ACTION_GET_CONTENT)
             imagePickerIntent.type = "image/*"
@@ -75,7 +75,7 @@ class CreateActivity : AppCompatActivity() {
                 Log.i("btnGallery", "photoUri $photoUri")
                 imageView.setImageURI(photoUri)
             } else {
-                Toast.makeText(this, "Image seletion canceled.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Image selection canceled.", Toast.LENGTH_SHORT).show()
             }
         } else if (requestCode == CAPTURE_PHOTO_CODE && resultCode == Activity.RESULT_OK) {
             val takenImage = BitmapFactory.decodeFile(photoFile.absolutePath)

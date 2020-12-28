@@ -181,6 +181,8 @@ abstract class ImageUtils {
             return BitmapFactory.decodeStream(inputStream)
         }
 
+        // The content image and the style image must be RGB images with pixel values
+        // being float32 numbers between [0..1]
         fun convertArrayToBitmap(
             imageArray: Array<Array<Array<FloatArray>>>,
             imageWidth: Int,
