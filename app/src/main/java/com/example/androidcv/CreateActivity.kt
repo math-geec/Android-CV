@@ -9,6 +9,8 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import kotlinx.android.synthetic.main.activity_create.*
@@ -85,4 +87,9 @@ class CreateActivity : AppCompatActivity() {
         }
     }
 
+    // fun sendImage(view: View) {
+    //     val intent = Intent(this, MainActivity::class.java)
+    //     intent.putExtra("resId", R.drawable.image)
+    //     startActivity(intent)
+    // }
 }

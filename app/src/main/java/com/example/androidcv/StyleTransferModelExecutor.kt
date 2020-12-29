@@ -73,22 +73,22 @@ class StyleTransferModelExecutor(
             // Style Image Shape: (1, 256, 256, 3)
             val input = ImageUtils.bitmapToByteBuffer(styleBitmap, STYLE_IMAGE_SIZE, STYLE_IMAGE_SIZE)
 
-            // Set inputs for style predict model
+            // Set inputs & outputs for style predict model
             val inputsForPredict = arrayOf<Any>(input)
             val outputsForPredict = HashMap<Int, Any>()
             // Style Bottleneck Shape: (1, 1, 1, 100)
             val styleBottleneck = Array(1) { Array(1) { Array(1) { FloatArray(BOTTLENECK_SIZE) } } }
             outputsForPredict[0] = styleBottleneck
-            preProcessTime = SystemClock.uptimeMillis() - preProcessTime
 
+            preProcessTime = SystemClock.uptimeMillis() - preProcessTime
             stylePredictTime = SystemClock.uptimeMillis()
-            // The results of this inference could be reused given the style does not change
-            // That would be a good practice in case this was applied to a video stream.
+
+            // Style predict model converts the style image to a style embedding vector
             interpreterPredict.runForMultipleInputsOutputs(inputsForPredict, outputsForPredict)
             stylePredictTime = SystemClock.uptimeMillis() - stylePredictTime
             Log.d(TAG, "Style Predict Time to run: $stylePredictTime")
 
-            // Set inputs for style transform model
+            // Set inputs & outputs for style transform model
             val inputsForStyleTransfer = arrayOf(contentArray, styleBottleneck)
             val outputsForStyleTransfer = HashMap<Int, Any>()
             val outputImage =
@@ -96,14 +96,16 @@ class StyleTransferModelExecutor(
             outputsForStyleTransfer[0] = outputImage
 
             styleTransferTime = SystemClock.uptimeMillis()
+
+            // Style transform model applies the style embedding vector on the content image to generate a stylized image
             interpreterTransform.runForMultipleInputsOutputs(
                 inputsForStyleTransfer,
                 outputsForStyleTransfer
             )
             styleTransferTime = SystemClock.uptimeMillis() - styleTransferTime
             Log.d(TAG, "Style apply Time to run: $styleTransferTime")
-
             postProcessTime = SystemClock.uptimeMillis()
+
             // Final Stylized Image Shape: (1, 384, 384, 3)
             var styledImage =
                 ImageUtils.convertArrayToBitmap(outputImage, CONTENT_IMAGE_SIZE, CONTENT_IMAGE_SIZE)
