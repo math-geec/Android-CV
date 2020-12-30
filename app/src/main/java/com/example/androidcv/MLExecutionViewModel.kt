@@ -13,7 +13,7 @@ class MLExecutionViewModel : ViewModel() {
 
     private val _styledBitmap = MutableLiveData<ModelExecutionResult>()
 
-    // communicate to MainActivity using LiveData
+    // communicate to CreateActivity using LiveData
     val styledBitmap: LiveData<ModelExecutionResult>
         get() = _styledBitmap
 
