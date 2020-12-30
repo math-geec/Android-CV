@@ -23,6 +23,8 @@ private lateinit var photoFile: File
 
 class CreateActivity : AppCompatActivity() {
     private var photoUri: Uri? = null
+    private var isRunningModel = false
+    private var selectedStyle: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +75,7 @@ class CreateActivity : AppCompatActivity() {
         if (requestCode == PICK_PHOTO_CODE) {
             // check the user has selected an image
             if (resultCode == Activity.RESULT_OK) {
+                // TODO: update Uri to be bitmap
                 photoUri = data?.data
                 Log.i("btnGallery", "photoUri $photoUri")
                 imageView.setImageURI(photoUri)
@@ -85,6 +88,29 @@ class CreateActivity : AppCompatActivity() {
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    private fun startRunningModel() {
+        if (!isRunningModel && imageView.drawable != null && selectedStyle.isNotEmpty()) {
+            enableControls(false)
+            // setImageView(styleImageView, getUriFromAssetThumb(selectedStyle))
+            // resultImageView.visibility = View.INVISIBLE
+            // progressBar.visibility = View.VISIBLE
+            // viewModel.onApplyStyle(
+            //     baseContext, lastSavedFile, selectedStyle, styleTransferModelExecutor,
+            //     inferenceThread
+            // )
+        } else {
+            Toast.makeText(this, "Previous Model still running", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // function to control buttons
+    private fun enableControls(enable: Boolean) {
+        isRunningModel = !enable
+        btnCamera.isEnabled = enable
+        btnGallery.isEnabled = enable
+        btnUpload.isEnabled = enable
     }
 
     // fun sendImage(view: View) {
