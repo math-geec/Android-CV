@@ -10,6 +10,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.FileProvider
@@ -25,6 +26,7 @@ class CreateActivity : AppCompatActivity() {
     private var photoUri: Uri? = null
     private var isRunningModel = false
     private var selectedStyle: String = ""
+    private lateinit var styleImageView: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +65,7 @@ class CreateActivity : AppCompatActivity() {
     }
 
     private fun handleUploadButtonClick() {
-        if (imageView.drawable == null) {
+        if (imageViewOriginal.drawable == null) {
             Toast.makeText(this, "No photo selected.", Toast.LENGTH_SHORT).show()
             return
         }
@@ -78,28 +80,29 @@ class CreateActivity : AppCompatActivity() {
                 // TODO: update Uri to be bitmap
                 photoUri = data?.data
                 Log.i("btnGallery", "photoUri $photoUri")
-                imageView.setImageURI(photoUri)
+                imageViewOriginal.setImageURI(photoUri)
             } else {
                 Toast.makeText(this, "Image selection canceled.", Toast.LENGTH_SHORT).show()
             }
         } else if (requestCode == CAPTURE_PHOTO_CODE && resultCode == Activity.RESULT_OK) {
             val takenImage = BitmapFactory.decodeFile(photoFile.absolutePath)
-            imageView.setImageBitmap(takenImage)
+            imageViewOriginal.setImageBitmap(takenImage)
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
+    // apply the selected style on the content image
     private fun startRunningModel() {
-        if (!isRunningModel && imageView.drawable != null && selectedStyle.isNotEmpty()) {
+        if (!isRunningModel && imageViewOriginal.drawable != null && selectedStyle.isNotEmpty()) {
             enableControls(false)
-            // setImageView(styleImageView, getUriFromAssetThumb(selectedStyle))
-            // resultImageView.visibility = View.INVISIBLE
-            // progressBar.visibility = View.VISIBLE
-            // viewModel.onApplyStyle(
-            //     baseContext, lastSavedFile, selectedStyle, styleTransferModelExecutor,
-            //     inferenceThread
-            // )
+            setImageView(styleImageView, getUriFromAssetThumb(selectedStyle))
+            resultImageView.visibility = View.INVISIBLE
+            progressBar.visibility = View.VISIBLE
+            viewModel.onApplyStyle(
+                baseContext, lastSavedFile, selectedStyle, styleTransferModelExecutor,
+                inferenceThread
+            )
         } else {
             Toast.makeText(this, "Previous Model still running", Toast.LENGTH_SHORT).show()
         }
@@ -111,6 +114,11 @@ class CreateActivity : AppCompatActivity() {
         btnCamera.isEnabled = enable
         btnGallery.isEnabled = enable
         btnUpload.isEnabled = enable
+    }
+
+    // get style thumbnails from asset
+    private fun getUriFromAssetThumb(thumb: String): String {
+        return "file:///android_asset/thumbnails/$thumb"
     }
 
     // fun sendImage(view: View) {

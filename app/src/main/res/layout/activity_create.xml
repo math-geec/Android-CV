@@ -20,12 +20,23 @@
         android:text="@string/upload" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imageViewOriginal"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/padding_normal"
         android:layout_marginTop="@dimen/padding_normal"
         app:layout_constraintTop_toBottomOf="@+id/btnUpload"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/imageViewResult" />
+
+    <ImageView
+        android:id="@+id/imageViewResult"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/padding_normal"
+        android:layout_marginTop="@dimen/padding_normal"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewOriginal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/horizontalScrollView" />
@@ -37,7 +48,7 @@
         android:layout_marginBottom="@dimen/padding_normal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewResult"
         app:layout_constraintBottom_toTopOf="@id/btnGallery">
 
         <LinearLayout
