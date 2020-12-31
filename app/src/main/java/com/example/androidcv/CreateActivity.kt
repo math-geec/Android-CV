@@ -11,26 +11,39 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import kotlinx.android.synthetic.main.activity_create.*
+import kotlinx.coroutines.asCoroutineDispatcher
 import java.io.File
+import java.util.concurrent.Executors
 
 private const val FILE_NAME = "photo.jpg"
 private const val PICK_PHOTO_CODE = 42
 private const val CAPTURE_PHOTO_CODE = 41
-private lateinit var photoFile: File
 
 class CreateActivity : AppCompatActivity() {
     private var photoUri: Uri? = null
     private var isRunningModel = false
     private var selectedStyle: String = ""
+    private var lastSavedFile = ""
+    private lateinit var photoFile: File
     private lateinit var styleImageView: ImageView
+    private lateinit var resultImageView: ImageView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var viewModel: MLExecutionViewModel
+    private lateinit var styleTransferModelExecutor: StyleTransferModelExecutor
+    private val inferenceThread = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
+
+        resultImageView = findViewById(R.id.imageViewResult)
+        styleImageView = findViewById(R.id.styleView1)
+        progressBar = findViewById(R.id.progress_circular)
 
         btnGallery.setOnClickListener {
             Log.i("btnGallery", "Open up image picker on device")
@@ -94,15 +107,13 @@ class CreateActivity : AppCompatActivity() {
 
     // apply the selected style on the content image
     private fun startRunningModel() {
-        if (!isRunningModel && imageViewOriginal.drawable != null && selectedStyle.isNotEmpty()) {
+        if (!isRunningModel && lastSavedFile.isNotEmpty() && selectedStyle.isNotEmpty()) {
             enableControls(false)
             setImageView(styleImageView, getUriFromAssetThumb(selectedStyle))
             resultImageView.visibility = View.INVISIBLE
             progressBar.visibility = View.VISIBLE
-            viewModel.onApplyStyle(
-                baseContext, lastSavedFile, selectedStyle, styleTransferModelExecutor,
-                inferenceThread
-            )
+            viewModel.onApplyStyle( baseContext, lastSavedFile, selectedStyle, styleTransferModelExecutor,
+                inferenceThread )
         } else {
             Toast.makeText(this, "Previous Model still running", Toast.LENGTH_SHORT).show()
         }
@@ -119,6 +130,11 @@ class CreateActivity : AppCompatActivity() {
     // get style thumbnails from asset
     private fun getUriFromAssetThumb(thumb: String): String {
         return "file:///android_asset/thumbnails/$thumb"
+    }
+
+    // set up image to imageView, may need preprocessing
+    private fun setImageView(imageView: ImageView, imagePath: String) {
+
     }
 
     // fun sendImage(view: View) {

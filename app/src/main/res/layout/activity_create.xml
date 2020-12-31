@@ -28,18 +28,30 @@
         app:layout_constraintTop_toBottomOf="@+id/btnUpload"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/imageViewResult" />
+        app:layout_constraintBottom_toTopOf="@id/frameLayout" />
 
-    <ImageView
-        android:id="@+id/imageViewResult"
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/padding_normal"
-        android:layout_marginTop="@dimen/padding_normal"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewOriginal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/horizontalScrollView" />
+        app:layout_constraintTop_toBottomOf="@id/imageViewOriginal"
+        app:layout_constraintBottom_toTopOf="@id/horizontalScrollView"
+        android:layout_marginBottom="@dimen/padding_normal" >
+
+        <ImageView
+            android:id="@+id/imageViewResult"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ProgressBar
+            android:id="@+id/progressCircle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
@@ -48,7 +60,7 @@
         android:layout_marginBottom="@dimen/padding_normal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewResult"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout"
         app:layout_constraintBottom_toTopOf="@id/btnGallery">
 
         <LinearLayout
