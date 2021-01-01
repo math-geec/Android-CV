@@ -20,7 +20,7 @@
         android:text="@string/upload" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imageViewOriginal"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/padding_normal"
@@ -28,7 +28,61 @@
         app:layout_constraintTop_toBottomOf="@+id/btnUpload"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btnCamera" />
+        app:layout_constraintBottom_toTopOf="@id/frameLayout" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageViewOriginal"
+        app:layout_constraintBottom_toTopOf="@id/horizontalScrollView"
+        android:layout_marginBottom="@dimen/padding_normal" >
+
+        <ImageView
+            android:id="@+id/imageViewResult"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ProgressBar
+            android:id="@+id/progressCircle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_normal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+        app:layout_constraintBottom_toTopOf="@id/btnGallery">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/styleView1"
+                android:layout_width="@dimen/style_preview"
+                android:layout_height="@dimen/style_preview"
+                android:padding="4dp"/>
+
+            <ImageView
+                android:id="@+id/styleView2"
+                android:layout_width="@dimen/style_preview"
+                android:layout_height="@dimen/style_preview"
+                android:padding="4dp"/>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
 
     <Button
         android:id="@+id/btnCamera"
