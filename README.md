@@ -6,9 +6,10 @@ Style Transfer app based on the idea in [A Neural Algorithm of Artistic Style](h
 Two potential approaches:
 * Model on device, i.e. deploy the model in the app with TensorFlow Lite. Work in branch [TFlite](https://github.com/math-geec/Android-CV/tree/TFlite).
 * Connect external model through API request. Work in branch [pythonAPI](https://github.com/math-geec/Android-CV/tree/pythonAPI).
-####
 
-# TFlite
+---
+
+## TFlite
 
 ### Status: In Progress
 
@@ -22,6 +23,8 @@ This Artistic Style Transfer model consists of two submodels:
 
 **Note**: Since running style transfer on the UI thread is computational expensive, ViewModel and Coroutine are applied to run it on a dedicated background thread.
 
-# pythonAPI
+---
+
+## pythonAPI
 
 ### Status: Waiting for python model

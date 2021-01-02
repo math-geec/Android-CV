@@ -43,7 +43,9 @@ class CreateActivity : AppCompatActivity() {
 
         resultImageView = findViewById(R.id.imageViewResult)
         styleImageView = findViewById(R.id.styleView1)
-        progressBar = findViewById(R.id.progress_circular)
+        progressBar = findViewById(R.id.progressCircle)
+
+        progressBar.visibility = View.INVISIBLE
 
         btnGallery.setOnClickListener {
             Log.i("btnGallery", "Open up image picker on device")
