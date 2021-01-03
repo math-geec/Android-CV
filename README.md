@@ -27,4 +27,4 @@ This Artistic Style Transfer model consists of two submodels:
 
 ## pythonAPI
 
-### Status: Waiting for python model
+### Status: Implementing python model in [repo](https://github.com/math-geec/Neural-Style-Transfer)
