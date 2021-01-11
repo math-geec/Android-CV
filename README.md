@@ -29,4 +29,10 @@ This Artistic Style Transfer model consists of two submodels:
 
 ### Status: Setting up API transaction
 
+*Known issue*:
+- cuda = 0 kills all the RAM
+- cuda = 1 runs out of drive space
+
+*Possible solution*: reduce content image size 
+
 Neural Style Transfer model is implemented in [repo](https://github.com/math-geec/Neural-Style-Transfer)
