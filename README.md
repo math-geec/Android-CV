@@ -27,7 +27,7 @@ This Artistic Style Transfer model consists of two submodels:
 
 ## pythonAPI
 
-### Status: Setting up API transaction
+### Status: Testing upload image
 
 *Known issue*:
 - cuda = 0 kills all the RAM
