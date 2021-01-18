@@ -4,8 +4,8 @@ Style Transfer app based on the idea in [A Neural Algorithm of Artistic Style](h
 ####
 
 Two potential approaches:
-* Model on device, i.e. deploy the model in the app with TensorFlow Lite. Work in branch [TFlite](https://github.com/math-geec/Android-CV/tree/TFlite).
-* Connect external model through API request. Work in branch [pythonAPI](https://github.com/math-geec/Android-CV/tree/pythonAPI).
+* Model on device, i.e. deploy the model in the app with TensorFlow Lite. Work in this repo [Android-CV](https://github.com/math-geec/Android-CV)
+* Connect external model through API request. Work in repo [Android-CV-pythonAPI](https://github.com/math-geec/Android-CV-pythonAPI)
 
 ---
 
