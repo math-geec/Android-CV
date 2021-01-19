@@ -27,12 +27,7 @@ This Artistic Style Transfer model consists of two submodels:
 
 ## pythonAPI
 
-### Status: Testing upload image
+### Work in repo: [Android-CV-pythonAPI](https://github.com/math-geec/Android-CV-pythonAPI)
 
-*Known issue*:
-- cuda = 0 kills all the RAM
-- cuda = 1 runs out of drive space
-
-*Possible solution*: reduce content image size 
 
 Neural Style Transfer model is implemented in [repo](https://github.com/math-geec/Neural-Style-Transfer)
